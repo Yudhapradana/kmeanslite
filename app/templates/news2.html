@@ -1,0 +1,148 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+<div class="main-content">
+            <!-- page title area start -->
+            <div class="page-title-area">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <div class="breadcrumbs-area clearfix">
+                            <h4 class="page-title pull-left">Dashboard</h4>
+                            <ul class="breadcrumbs pull-left">
+                                <li><a href="index.html">Home</a></li>
+                                <li><span>Dashboard</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="float-right">
+                                <button class="btn btn-success btn-xs mb-3 mt-3 mr-1 ml-1 float-right" type="submit" data-toggle="modal" data-target="#importNews"><i class="fa fa-download"></i></button>
+                                <button class="btn btn-success btn-xs mb-3 mt-3 float-right" type="submit" data-toggle="modal" data-target="#createNews"><i class="fa fa-plus-square"></i> Add News</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- page title area end -->
+            <br>
+            <div class="main-content-inner">
+                <div class="row">
+                    <!-- seo fact area start -->
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="">
+                                        <table id="yuda-table">
+                                        </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+        <!--Modal-->
+        <div class="modal fade" id="createNews">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ url_for('createNews') }}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add News</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row mt-2 mb-2">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <label>Title News</label>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                <input class="form-control" type="text" id="title" name="title" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row mt-2 mb-2">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <label>Description</label>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                <textarea name="desc" id="desc" cols="40" rows="10" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row mt-2 mb-2">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <label>Source</label>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                <input class="form-control" type="text" id="source" name="source" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="importNews">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form action="{{ url_for('importNews') }}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Import News</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label>File</label>
+                            <input type="file" name="file" id="file" class="form-control dropify" data-height="100" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- main content area end -->
+        <!-- footer area start-->
+        <footer>
+            <div class="footer-area">
+                <p>© Copyright 2018. All right reserved. Template by <a href="https://colorlib.com/wp/">Colorlib</a>.</p>
+            </div>
+        </footer>
+
+<script>
+
+        $(document).ready(function(){
+
+        $('#yuda-table').DataTable({
+            ajax : {
+                'url' : "{{ url_for('getNews') }}",
+            },
+            'columns': [
+                    {
+                        'title' : "No",
+                        'data' : "id"
+                    },{
+                        'title' : "Judul",
+                        'data' : "judul"
+                    },
+                    {
+                        'title' : "Action",
+                        'data' : (data) => {
+                            let ret = "";
+                            ret += "<a href='{{ url_for('getNews') }}'>Detail</a>";
+                            return ret;
+                        }
+                    }
+                ]
+
+        });
+    });
+    </script>
+{% endblock %}
